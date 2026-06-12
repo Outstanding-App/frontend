@@ -1,19 +1,19 @@
 package com.tavro.outstanding.component.profile
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.tavro.outstanding.base.koin.OutstandingKoinComponent
+import com.tavro.outstanding.navigation.Component
 import com.tavro.outstanding.navigation.Navigator
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileComponent(
     componentContext: ComponentContext,
     private val navigator: Navigator,
-) : ComponentContext by componentContext {
+) : Component, ComponentContext by componentContext, OutstandingKoinComponent {
 
-    private val _state = MutableStateFlow(ProfileState())
-    val state = _state.asStateFlow()
+    @Composable
+    override fun Render(modifier: Modifier) {
+        ProfileScreen(modifier = modifier)
+    }
 }
-
-data class ProfileState(
-    val isLoading: Boolean = false,
-)
