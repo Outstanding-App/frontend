@@ -13,7 +13,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.TextFieldValue
@@ -58,9 +61,8 @@ fun LoginScreen(
         content = { contentPadding ->
             LoginScreenContent(
                 loginState = state,
-                onLogin = component::onLogin,
-                onLoginFailed = component::failedToLogin,
-                onLoginClicked = component::onLoginStarted,
+                onLoginClicked = component::onLogin,
+                onRegisterClicked = component::onRegister,
                 contentPadding = contentPadding,
                 modifier = Modifier.fillMaxSize()
             )
@@ -71,9 +73,8 @@ fun LoginScreen(
 @Composable
 internal fun LoginScreenContent(
     loginState: LoginScreenState,
-    onLogin: () -> Unit,
-    onLoginFailed: (error: LoginError) -> Unit,
-    onLoginClicked: () -> Unit,
+    onLoginClicked: (username: String, password: String) -> Unit,
+    onRegisterClicked: (username: String, password: String, email: String) -> Unit,
     usernameFocusRequester: FocusRequester? = null,
     usernameInteractionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     usernameKeyboardActions: KeyboardActions = TextFieldDefaults.defaultKeyboardActions,
@@ -85,6 +86,13 @@ internal fun LoginScreenContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
+    var username by remember { mutableStateOf(TextFieldValue("")) }
+    var password by remember { mutableStateOf(TextFieldValue("")) }
+
+    var registerUsername by remember { mutableStateOf(TextFieldValue("")) }
+    var registerPassword by remember { mutableStateOf(TextFieldValue("")) }
+    var email by remember { mutableStateOf(TextFieldValue("")) }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(Space.md),
         modifier = modifier
@@ -94,8 +102,8 @@ internal fun LoginScreenContent(
     ) {
         JadeTextField(
             size = TextFieldSize.Normal,
-            text = TextFieldValue(text = ""),
-            onTextChange = {},
+            text = username,
+            onTextChange = { username = it },
             supportingText = null,
             placeholder = "username",
             keyboardActions = usernameKeyboardActions,
@@ -112,8 +120,8 @@ internal fun LoginScreenContent(
         )
         JadeTextField(
             size = TextFieldSize.Normal,
-            text = TextFieldValue(text = ""),
-            onTextChange = {},
+            text = password,
+            onTextChange = { password = it },
             supportingText = null,
             placeholder = "password",
             keyboardActions = passwordKeyboardActions,
@@ -130,7 +138,69 @@ internal fun LoginScreenContent(
         )
         JadeFilledButton(
             text = "Login",
-            onClick = onLoginClicked,
+            onClick = { onLoginClicked(username.text, password.text) },
+            enabled = loginState is LoginScreenState.Initial,
+            minFontSize = TextUnit.Unspecified,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        JadeTextField(
+            size = TextFieldSize.Normal,
+            text = registerUsername,
+            onTextChange = { registerUsername = it },
+            supportingText = null,
+            placeholder = "username",
+            keyboardActions = usernameKeyboardActions,
+            keyboardOptions = usernameKeyboardOptions,
+            singleLine = true,
+            maxLines = 1,
+            minLines = TextFieldDefaults.DEFAULT_MIN_LINES,
+            visualTransformation = TextFieldDefaults.defaultVisualTransformation,
+            interactionSource = usernameInteractionSource,
+            readOnly = false,
+            focusRequester = usernameFocusRequester,
+            autoSizeText = TextFieldDefaults.DEFAULT_AUTO_SIZE_TEXT,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        JadeTextField(
+            size = TextFieldSize.Normal,
+            text = registerPassword,
+            onTextChange = { registerPassword = it },
+            supportingText = null,
+            placeholder = "password",
+            keyboardActions = passwordKeyboardActions,
+            keyboardOptions = passwordKeyboardOptions,
+            singleLine = true,
+            maxLines = 1,
+            minLines = TextFieldDefaults.DEFAULT_MIN_LINES,
+            visualTransformation = TextFieldDefaults.defaultVisualTransformation,
+            interactionSource = passwordInteractionSource,
+            readOnly = false,
+            focusRequester = passwordFocusRequester,
+            autoSizeText = TextFieldDefaults.DEFAULT_AUTO_SIZE_TEXT,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        JadeTextField(
+            size = TextFieldSize.Normal,
+            text = email,
+            onTextChange = { email = it },
+            supportingText = null,
+            placeholder = "email",
+            keyboardActions = passwordKeyboardActions,
+            keyboardOptions = passwordKeyboardOptions,
+            singleLine = true,
+            maxLines = 1,
+            minLines = TextFieldDefaults.DEFAULT_MIN_LINES,
+            visualTransformation = TextFieldDefaults.defaultVisualTransformation,
+            interactionSource = passwordInteractionSource,
+            readOnly = false,
+            focusRequester = passwordFocusRequester,
+            autoSizeText = TextFieldDefaults.DEFAULT_AUTO_SIZE_TEXT,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        JadeFilledButton(
+            text = "Register",
+            onClick = { onRegisterClicked(registerUsername.text, registerPassword.text, email.text) },
             enabled = loginState is LoginScreenState.Initial,
             minFontSize = TextUnit.Unspecified,
             modifier = Modifier.fillMaxWidth()

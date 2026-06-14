@@ -18,7 +18,7 @@ val uiModule = module {
         RootComponent(ctx, get(), get(), get(), get())
     }
     factory { (ctx: ComponentContext, config: Config.Main) ->
-        MainComponent(ctx, config, get())
+        MainComponent(ctx, config, get(), get())
     }
     factory { (ctx: ComponentContext) ->
         HomeComponent(ctx, get(), get())
