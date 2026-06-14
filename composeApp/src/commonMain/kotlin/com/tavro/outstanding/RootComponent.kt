@@ -39,7 +39,6 @@ import com.tavro.outstanding.navigation.rememberNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -100,11 +99,12 @@ class RootComponent(
         enableDuplicateConfiguration()
 
         mainScope.launch {
-            val account = accountProvider.accountFlow.firstOrNull()
-            when {
-                // TODO: Uncomment when login is implemented. account == null -> navigation.replaceAll(Config.Onboarding.Login)
-                // TODO: Uncomment when login is implemented. account.authToken == null -> navigation.replaceAll(Config.AuthToken)
-                stack.active.configuration is Config.Main -> navigateToInitialScreen()
+            accountProvider.hasAccountFlow.collect { hasAccount ->
+                when (hasAccount) {
+                    null -> Unit
+                    false -> navigation.replaceAll(Config.Onboarding.Login)
+                    true -> navigation.replaceAll(Config.Main())
+                }
             }
         }
     }
@@ -112,10 +112,6 @@ class RootComponent(
     @OptIn(ExperimentalDecomposeApi::class)
     private fun enableDuplicateConfiguration() {
         DecomposeExperimentFlags.duplicateConfigurationsEnabled = true
-    }
-
-    private fun navigateToInitialScreen() = mainScope.launch {
-        navigator.replaceAll(Config.Main())
     }
 
     sealed interface Child : BaseComponent {
