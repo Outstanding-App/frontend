@@ -68,7 +68,7 @@ fun MainScreen(
                     }
                 when (tab) {
                     MainScreenTab.Home -> MapScreen(modifier = tabModifier)
-                    MainScreenTab.Profile -> ProfileScreen(modifier = tabModifier)
+                    MainScreenTab.Profile -> ProfileScreen(onLogout = component::onLogout, modifier = tabModifier)
                 }
             }
         },

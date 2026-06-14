@@ -14,6 +14,6 @@ class ProfileComponent(
 
     @Composable
     override fun Render(modifier: Modifier) {
-        ProfileScreen(modifier = modifier)
+        ProfileScreen(onLogout = {}, modifier = modifier)
     }
 }
