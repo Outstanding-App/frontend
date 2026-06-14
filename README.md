@@ -2,9 +2,7 @@
 
 This repository contains the ongoing development of a KMP application for a geolocation social media platform. The project was originally prototyped by [@tavro](https://tavro.se) and [@parslie](https://parslie.github.io) as part of a university course and later reimagined as a hobby project. The goal of this repository is to evolve that prototype into a finalized open-source implementation.
 
-## Software Architecture Ideas
-
-### Technology Stack
+## Technology Stack
 
   | Layer                | Technology             |
   |----------------------|------------------------|
@@ -13,33 +11,41 @@ This repository contains the ongoing development of a KMP application for a geol
   | Architecture Pattern | Component-based        |
   | Dependency Injection | Koin                   |
   | Navigation           | Decompose              |
-  | Networking           | Ktor + Ktorfit + Wire  |
+  | Networking           | Ktor                   |
   | Database             | AndroidX Room          |
   | Serialization        | kotlinx.serialization  |
   | Build System         | Gradle with Kotlin DSL |
 
+## Jade Design System
+
+UI components are built on top of a shared design system called **Jade**, living in `designsystem/`. It provides:
+
+- **Theme**: `JadeTheme` exposes `colorScheme`, `typography`, and `shapes` via `CompositionLocal`
+- **Primitives**: `JadeSurface`, `JadeText`
+- **Layout**: `JadeScaffold`
+- **Inputs**: `JadeTextField` (single-line and multiline, with auto-size support), `JadeFilledButton`
+
 ## Component Structure
 
-Each feature should follow this pattern:
+Each feature exposes a `Component` that owns its state and business logic, and renders itself via a `@Composable Render()` function.
 
 ```kotlin
-class FeatureComponent(
+class LoginComponent(
     componentContext: ComponentContext,
     private val navigator: Navigator,
-    private val useCase: FeatureUseCase,
-) : ComponentContext by componentContext {
+    private val authService: AuthService,
+    private val accountRepository: AccountRepository,
+    configuration: Configuration,
+) : ComponentContext by componentContext, Component {
 
-    private val _state = MutableStateFlow(FeatureState())
+    private val _state = MutableStateFlow<LoginScreenState>(LoginScreenState.Initial)
     val state = _state.asStateFlow()
 
-    val stack: Value<ChildStack<Config, Child>> = childStack(...)
+    fun onLogin(username: String, password: String) { ... }
+    fun onRegister(username: String, password: String, email: String) { ... }
 
-    fun onAction(action: Action) { ... }
-}
-
-@Composable
-fun FeatureScreen(component: FeatureComponent) {
-    val state by component.state.collectAsStateWithLifecycle()
+    @Composable
+    override fun Render(modifier: Modifier) = LoginScreen(this, modifier)
 }
 ```
 
@@ -54,9 +60,9 @@ sealed interface Config {
     data class Main(val tab: Tab = Tab.Map) : Config
 
     @Serializable
-    sealed interface Settings : Config {
+    sealed interface Onboarding : Config {
         @Serializable
-        data object Main : Settings
+        data object Login : Onboarding
     }
 
     enum class Tab { Map, Feed, Create, Profile }
@@ -74,6 +80,8 @@ class Navigator {
     fun pop() = stack.navigate { it.dropLast(1).ifEmpty { listOf(Config.Main()) } }
 }
 ```
+
+`RootComponent` observes `AccountProvider.accountFlow` on startup, if no account exists it pushes `Config.Onboarding.Login`, otherwise it goes straight to `Config.Main`.
 
 ## Dependency Injection
 
@@ -104,12 +112,17 @@ val uiModule = module {
 
 ## Data Layer
 
+### Auth
+
+`AuthService` posts credentials to the backend and returns a `UserSession` containing `user_id`, `username`, and `token`. On success, `LoginComponent` persists an `Account` to the local database and `RootComponent` navigates to the main screen.
+
 ### Repository Pattern
 
 ```kotlin
 class AccountRepository(private val dao: AccountDao) {
     suspend fun save(account: Account): Long
     suspend fun update(account: Account)
+    suspend fun updateAuthToken(id: Long, authToken: String?)
     fun getAccountFlow(): Flow<Account?>
     suspend fun clear()
 }
@@ -118,26 +131,17 @@ class AccountRepository(private val dao: AccountDao) {
 ### Room Database
 
 ```kotlin
-@Dao
-interface AccountDao {
-    @Query("SELECT * FROM accounts LIMIT 1")
-    fun getAccountFlow(): Flow<AccountEntity?>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(account: AccountEntity): Long
+@Database(entities = [AccountEntity::class], version = 1)
+abstract class OutstandingDatabase : RoomDatabase() {
+    abstract fun accountDao(): AccountDao
 }
-```
 
-### Networking
-
-Ktor + Ktorfit for REST APIs
-
-```kotlin
-@Ktorfit
-interface ExampleApi {
-    @POST("/v1/examples")
-    suspend fun createExample(@Body request: ExampleRequest): ExampleResponse
-}
+@Entity(tableName = "accounts")
+data class AccountEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @ColumnInfo(name = "auth_token") val authToken: String? = null,
+    @ColumnInfo(name = "created_at") val createdAt: Long = 0L,
+)
 ```
 
 ---
@@ -148,11 +152,23 @@ interface ExampleApi {
   It contains several subfolders:
   - [commonMain](./composeApp/src/commonMain/kotlin) is for code that's common for all targets.
   - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple's CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
 
 * [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you're sharing your UI with Compose Multiplatform,
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+
+## Backend
+
+The app connects to a backend running locally on port `8000`. Start the backend server before launching the app.
+
+### Android device (port forwarding)
+
+Android devices cannot reach host `localhost` directly. Use `adb reverse` to forward the device's port to your machine:
+
+```shell
+adb reverse tcp:8000 tcp:8000
+```
+
+Run this after connecting your device and before launching the app. Re-run it if you reconnect the device.
 
 ## Build and Run
 
