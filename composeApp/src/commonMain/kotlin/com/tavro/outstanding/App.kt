@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.tavro.outstanding.base.koin.OutstandingKoinContext
+import com.tavro.outstanding.core.koin.OutstandingKoinContext
 import com.tavro.outstanding.designsystem.theme.JadeTheme
 import org.koin.compose.KoinIsolatedContext
 

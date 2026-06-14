@@ -9,7 +9,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.retainedComponent
-import com.tavro.outstanding.base.koin.OutstandingKoinComponent
+import com.tavro.outstanding.core.UiInitializer
+import com.tavro.outstanding.core.koin.OutstandingKoinComponent
+import com.tavro.outstanding.core.ui.SimpleEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

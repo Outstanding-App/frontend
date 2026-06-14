@@ -1,8 +1,8 @@
 package com.tavro.outstanding.di
 
-import com.tavro.outstanding.UiInitializer
-import com.tavro.outstanding.base.Configuration
-import com.tavro.outstanding.base.koin.OutstandingKoinContext
+import com.tavro.outstanding.core.Configuration
+import com.tavro.outstanding.core.UiInitializer
+import com.tavro.outstanding.core.koin.OutstandingKoinContext
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.KoinApplication
 import org.koin.dsl.bind
@@ -25,7 +25,7 @@ fun setupOutstanding(
 }
 
 fun buildAppModule(dependencies: OutstandingDependencies) = module {
-    includes(modelModule, uiModule)
+    includes(dataModule, uiModule)
     val lazyScope = lazy { kotlinx.coroutines.MainScope() }
     single<CoroutineScope> { lazyScope.value }
     single<Configuration> { dependencies.configuration }

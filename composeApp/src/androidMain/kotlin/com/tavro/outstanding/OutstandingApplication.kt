@@ -1,12 +1,12 @@
 package com.tavro.outstanding
 
 import android.app.Application
-import com.tavro.outstanding.base.Configuration
-import com.tavro.outstanding.base.koin.OutstandingKoinComponent
+import com.tavro.outstanding.core.Configuration
+import com.tavro.outstanding.core.koin.OutstandingKoinComponent
+import com.tavro.outstanding.data.database.AndroidOutstandingDatabaseFactory
+import com.tavro.outstanding.data.database.OutstandingDatabase
 import com.tavro.outstanding.di.OutstandingDependencies
 import com.tavro.outstanding.di.setupOutstanding
-import com.tavro.outstanding.model.database.AndroidOutstandingDatabaseFactory
-import com.tavro.outstanding.model.database.OutstandingDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield

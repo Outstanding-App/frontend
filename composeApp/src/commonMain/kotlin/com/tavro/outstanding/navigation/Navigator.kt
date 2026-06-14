@@ -9,7 +9,7 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
-import com.tavro.outstanding.base.Configuration
+import com.tavro.outstanding.core.Configuration
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.getKoin
 

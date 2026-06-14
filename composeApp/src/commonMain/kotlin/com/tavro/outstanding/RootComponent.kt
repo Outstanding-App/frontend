@@ -21,13 +21,14 @@ import com.arkivanov.essenty.lifecycle.doOnPause
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.essenty.statekeeper.SerializableContainer
 import com.arkivanov.essenty.statekeeper.consumeRequired
-import com.tavro.outstanding.base.Configuration
-import com.tavro.outstanding.base.koin.OutstandingKoinComponent
-import com.tavro.outstanding.base.time.Clock
-import com.tavro.outstanding.component.main.MainComponent
-import com.tavro.outstanding.component.main.MainScreen
-import com.tavro.outstanding.component.main.mainScreenTab
-import com.tavro.outstanding.model.AccountProvider
+import com.tavro.outstanding.core.Configuration
+import com.tavro.outstanding.core.koin.OutstandingKoinComponent
+import com.tavro.outstanding.core.time.Clock
+import com.tavro.outstanding.core.ui.SystemBarsController
+import com.tavro.outstanding.domain.account.AccountProvider
+import com.tavro.outstanding.feature.main.MainComponent
+import com.tavro.outstanding.feature.main.MainScreen
+import com.tavro.outstanding.feature.main.mainScreenTab
 import com.tavro.outstanding.navigation.BaseComponent
 import com.tavro.outstanding.navigation.Component
 import com.tavro.outstanding.navigation.Config
@@ -233,7 +234,7 @@ fun RootContent(component: RootComponent, modifier: Modifier = Modifier) {
 
             // TODO: is RootComponent.Child.AuthToken -> AuthTokenRoute(component = child.component)
 
-            is RootComponent.Child.ComponentWrapper -> { // TODO: Why???
+            is RootComponent.Child.ComponentWrapper -> {
                 child.component.Render(Modifier)
             }
         }

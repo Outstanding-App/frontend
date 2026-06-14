@@ -59,8 +59,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
-import com.tavro.outstanding.Space
 import com.tavro.outstanding.designsystem.theme.JadeTheme
+import com.tavro.outstanding.designsystem.tokens.Space
 import com.tavro.outstanding.designsystem.theme.LocalJadeContentColor
 import com.tavro.outstanding.designsystem.theme.LocalJadeTextStyle
 import kotlin.math.ceil

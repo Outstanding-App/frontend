@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.tavro.outstanding.Space
 import com.tavro.outstanding.designsystem.theme.JadeTheme
+import com.tavro.outstanding.designsystem.tokens.Space
 import com.tavro.outstanding.designsystem.theme.ProvideContentColorTextStyle
 import com.tavro.outstanding.designsystem.theme.contentColorFor
 
