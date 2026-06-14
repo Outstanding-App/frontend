@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-// TODO: Move
+// TODO(015): Move componentScope related stuff below to it's own file
 fun CoroutineScope.withLifecycle(lifecycle: Lifecycle): CoroutineScope {
     lifecycle.doOnDestroy(::cancel)
 
@@ -81,15 +81,6 @@ data class UserSession(
                 this.token = token
             }
     }
-
-    /*
-    class Converter(private val json: Json) {
-        fun deserialize(s: String?): UserSession? =
-            if (s.isNullOrEmpty()) null else json.decodeFromString(s)
-
-        fun serializeNotNull(data: UserSession): String = json.encodeToString(data)
-    }
-    */
 
     val isUnknown: Boolean
         get() = user_id.isEmpty()

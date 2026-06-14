@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
-import com.tavro.outstanding.designsystem.components.JadeButtonSize
 import com.tavro.outstanding.designsystem.components.JadeFilledButton
 import com.tavro.outstanding.designsystem.theme.JadeTheme
 import com.tavro.outstanding.designsystem.theme.contentColorFor

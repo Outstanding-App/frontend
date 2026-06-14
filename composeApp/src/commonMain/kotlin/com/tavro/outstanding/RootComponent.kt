@@ -10,7 +10,6 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.router.children.NavigationSource
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
@@ -83,7 +82,7 @@ class RootComponent(
             previousChildAndConfig = currentChildAndConfig
         }
 
-        // TODO(XXX): Set developer settings
+        // TODO(014): Set developer settings
 
         doOnPause {
             navigationSessionController.updateExpirationTime()
@@ -129,10 +128,6 @@ class RootComponent(
                 }
             }
         }
-
-        // TODO: class AuthToken(val component: AuthTokenComponent) : Child
-        // TODO: Settings
-        // TODO: Onboarding
     }
 
     private fun child(config: Config, componentContext: ComponentContext): Child {
@@ -146,10 +141,6 @@ class RootComponent(
                 }
                 Child.Main(component = mainComponent)
             }
-
-            // TODO: Auth token
-            // TODO: Settings
-            // TODO: Onboarding
 
             else -> {
                 Child.ComponentWrapper(getComponent(config, componentContext))
@@ -222,19 +213,15 @@ fun RootContent(component: RootComponent, modifier: Modifier = Modifier) {
     val navigator = rememberNavigator()
     Children(
         stack = component.stack,
-        // TODO: animation
         modifier = modifier
     ) {
         when (val child = it.instance) {
             is RootComponent.Child.Main -> MainScreen(component = child.component)
 
-            // TODO: is RootComponent.Child.AuthToken -> AuthTokenRoute(component = child.component)
-
             is RootComponent.Child.ComponentWrapper -> {
                 child.component.Render(Modifier)
             }
         }
-        // TODO: Dialogs
     }
 }
 

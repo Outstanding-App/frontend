@@ -9,7 +9,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 
-// TODO: Move
 @Serializable
 data class LoginRequest(
     val username: String,

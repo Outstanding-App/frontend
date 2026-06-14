@@ -150,13 +150,13 @@ fun contentColorFor(backgroundColor: Color) =
         LocalJadeContentColor.current
     }
 
-// TODO(012): Discuss missing colors
+// TODO(012): Add unused token for all colors that are currently marked as Color(0xFF)
 fun JadeColorScheme.toM3ColorScheme(): androidx.compose.material3.ColorScheme = androidx.compose.material3.ColorScheme(
     primary = primary,
     onPrimary = onPrimary,
     primaryContainer = primaryContainer,
     onPrimaryContainer = onPrimaryContainer,
-    inversePrimary = Color(0xFF), // TODO: Unused token
+    inversePrimary = Color(0xFF),
     secondary = secondary,
     onSecondary = onSecondary,
     secondaryContainer = secondaryContainer,
