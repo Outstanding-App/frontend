@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,11 +75,97 @@ fun visualTransformationIfSupported(transformation: VisualTransformation) =
 
 internal object TextFieldDefaults {
     const val DEFAULT_AUTO_SIZE_TEXT = false
+    const val DEFAULT_MAX_LINES = Int.MAX_VALUE
     const val DEFAULT_MIN_LINES = 1
+    const val DEFAULT_SINGLE_LINE = true
+    const val DEFAULT_READ_ONLY = false
     val defaultMinWidth = 280.dp
     val defaultKeyboardActions = KeyboardActions.Default
     val defaultKeyboardOptions = KeyboardOptions.Default
     val defaultVisualTransformation = VisualTransformation.None
+}
+
+@Composable
+fun JadeTextField(
+    text: String,
+    onTextChange: (String) -> Unit,
+    supportingText: JadeSupportingText? = null,
+    placeholder: String? = null,
+    keyboardActions: KeyboardActions = TextFieldDefaults.defaultKeyboardActions,
+    keyboardOptions: KeyboardOptions = TextFieldDefaults.defaultKeyboardOptions,
+    singleLine: Boolean = TextFieldDefaults.DEFAULT_SINGLE_LINE,
+    maxLines: Int = TextFieldDefaults.DEFAULT_MAX_LINES,
+    minLines: Int = TextFieldDefaults.DEFAULT_MIN_LINES,
+    visualTransformation: VisualTransformation = TextFieldDefaults.defaultVisualTransformation,
+    interactionSource: MutableInteractionSource? = null,
+    readOnly: Boolean = TextFieldDefaults.DEFAULT_READ_ONLY,
+    focusRequester: FocusRequester? = null,
+    autoSizeText: Boolean = TextFieldDefaults.DEFAULT_AUTO_SIZE_TEXT,
+    modifier: Modifier = Modifier,
+    surfaceColor: Color = JadeTheme.colorScheme.surfaceContainer
+) {
+    TextFieldValueParser(
+        text = text,
+        onTextChange = onTextChange,
+    ) { textFieldValue, onTextFieldValueChange ->
+        JadeTextField(
+            size = TextFieldSize.Normal,
+            text = textFieldValue,
+            onTextChange = onTextFieldValueChange,
+            supportingText = supportingText,
+            placeholder = placeholder,
+            keyboardActions = keyboardActions,
+            keyboardOptions = keyboardOptions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            minLines = minLines,
+            visualTransformation = visualTransformation,
+            interactionSource = interactionSource,
+            readOnly = readOnly,
+            focusRequester = focusRequester,
+            autoSizeText = autoSizeText,
+            modifier = modifier,
+            surfaceColor = surfaceColor
+        )
+    }
+}
+
+@Composable
+fun JadeTextField(
+    text: TextFieldValue,
+    onTextChange: (TextFieldValue) -> Unit,
+    supportingText: JadeSupportingText? = null,
+    placeholder: String? = null,
+    keyboardActions: KeyboardActions = TextFieldDefaults.defaultKeyboardActions,
+    keyboardOptions: KeyboardOptions = TextFieldDefaults.defaultKeyboardOptions,
+    singleLine: Boolean = TextFieldDefaults.DEFAULT_SINGLE_LINE,
+    maxLines: Int = TextFieldDefaults.DEFAULT_MAX_LINES,
+    minLines: Int = TextFieldDefaults.DEFAULT_MIN_LINES,
+    visualTransformation: VisualTransformation = TextFieldDefaults.defaultVisualTransformation,
+    interactionSource: MutableInteractionSource? = null,
+    readOnly: Boolean = TextFieldDefaults.DEFAULT_READ_ONLY,
+    focusRequester: FocusRequester? = null,
+    autoSizeText: Boolean = TextFieldDefaults.DEFAULT_AUTO_SIZE_TEXT,
+    modifier: Modifier = Modifier,
+) {
+    JadeTextField(
+        size = TextFieldSize.Normal,
+        text = text,
+        onTextChange = onTextChange,
+        supportingText = supportingText,
+        placeholder = placeholder,
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        minLines = minLines,
+        visualTransformation = visualTransformation,
+        interactionSource = interactionSource,
+        readOnly = readOnly,
+        focusRequester = focusRequester,
+        autoSizeText = autoSizeText,
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -500,4 +587,36 @@ private class AutoSizeTextMinSize(
         // Placeholder which gives a representative single-line height without measuring real content.
         private val EmptyTextReplacement = "X".repeat(DEFAULT_WIDTH_CHAR_COUNT)
     }
+}
+
+@Composable
+internal fun TextFieldValueParser(
+    text: String,
+    onTextChange: (String) -> Unit,
+    content: @Composable (TextFieldValue, (TextFieldValue) -> Unit) -> Unit,
+) {
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = text)) }
+    val textFieldValue = textFieldValueState.copy(text = text)
+
+    SideEffect {
+        if (textFieldValue.selection != textFieldValueState.selection ||
+            textFieldValue.composition != textFieldValueState.composition
+        ) {
+            textFieldValueState = textFieldValue
+        }
+    }
+
+    var lastTextValue by remember(text) { mutableStateOf(text) }
+    val onTextFieldValueChange: (TextFieldValue) -> Unit = { newTextFieldValueState ->
+        textFieldValueState = newTextFieldValueState
+
+        val textChanged = lastTextValue != newTextFieldValueState.text
+        lastTextValue = newTextFieldValueState.text
+
+        if (textChanged) {
+            onTextChange(newTextFieldValueState.text)
+        }
+    }
+
+    content(textFieldValue, onTextFieldValueChange)
 }
