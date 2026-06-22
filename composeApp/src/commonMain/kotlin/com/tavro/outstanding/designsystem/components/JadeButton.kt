@@ -20,10 +20,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.tavro.outstanding.designsystem.components.JadeFilledButtonColors.Companion.default
 import com.tavro.outstanding.designsystem.theme.JadeTheme
-import com.tavro.outstanding.designsystem.tokens.Space
+import com.tavro.outstanding.designsystem.theme.LocalJadeContentColor
 import com.tavro.outstanding.designsystem.theme.ProvideContentColorTextStyle
 import com.tavro.outstanding.designsystem.theme.contentColorFor
+import com.tavro.outstanding.designsystem.tokens.Space
 
 /** Controls the height, padding, text style and corner radius of a Jade button. */
 enum class JadeButtonSize {
@@ -195,6 +197,61 @@ data class JadeFilledButtonColors(
             disabledContent = disabledContent
         )
     }
+}
+
+data class JadeOutlinedButtonColors(
+    val content: Color,
+    val border: Color,
+    val disabledContent: Color,
+    val disabledBorder: Color,
+) {
+    companion object {
+        @Composable
+        fun default(
+            content: Color = LocalJadeContentColor.current,
+            border: Color = JadeTheme.colorScheme.outline,
+            disabledContent: Color = JadeTheme.colorScheme.onDisabledSurface,
+            disabledBorder: Color = JadeTheme.colorScheme.disabledSurface,
+        ) = JadeOutlinedButtonColors(
+            content = content,
+            border = border,
+            disabledContent = disabledContent,
+            disabledBorder = disabledBorder
+        )
+    }
+}
+
+@Composable
+fun JadeOutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    size: JadeButtonSize = JadeButtonSize.Large,
+    colors: JadeOutlinedButtonColors = JadeOutlinedButtonColors.default(),
+    interactionSource: MutableInteractionSource? = null,
+    enabled: Boolean = true,
+    minFontSize: TextUnit = TextUnit.Unspecified,
+) {
+    ButtonBase(
+        text = text,
+        onClick = onClick,
+        enabled = enabled,
+        size = size,
+        type = ButtonType.Outlined,
+        enabledColors = ButtonColors(
+            background = Color.Transparent,
+            content = colors.content,
+            border = colors.border
+        ),
+        disabledColors = ButtonColors(
+            background = Color.Transparent,
+            content = colors.disabledContent,
+            border = colors.disabledBorder
+        ),
+        minFontSize = minFontSize,
+        modifier = modifier,
+        interactionSource = interactionSource,
+    )
 }
 
 /**
