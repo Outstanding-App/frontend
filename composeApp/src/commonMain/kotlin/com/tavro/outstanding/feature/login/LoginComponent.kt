@@ -144,7 +144,6 @@ class LoginComponent(
     }
 
     fun onRegister(username: String, password: String, email: String) {
-        println("$username, $password, $email")
         _state.value = LoginScreenState.Loading
         componentScope.launch {
             authService.register(username, password, password, email)

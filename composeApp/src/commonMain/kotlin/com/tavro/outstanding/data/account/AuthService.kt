@@ -51,7 +51,6 @@ class HttpAuthService(private val client: HttpClient) : AuthService {
     ): Result<UserSession> = runCatching {
         client.post("http://localhost:8000/users/register/") {
             contentType(ContentType.Application.Json)
-            println(RegisterRequest(username, password, passwordConfirmation, email))
             setBody(RegisterRequest(username, password, passwordConfirmation, email))
         }.body<AuthResponse>().toSession(username)
     }

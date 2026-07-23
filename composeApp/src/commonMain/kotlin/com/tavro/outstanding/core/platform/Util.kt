@@ -6,7 +6,7 @@ val isAndroid = platform == Platform.ANDROID
 
 expect val buildType: BuildType
 val isDebuggable: Boolean
-    get() = buildType == BuildType.DEBUG
+    get() = buildType.isDebug
 
 expect val platformName: String
 
