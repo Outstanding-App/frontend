@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -12,17 +11,6 @@ plugins {
 }
 
 kotlin {
-    // Extend the default hierarchy with a "mobile" group (Android + iOS)
-    // Room doesn't support JS/WasmJs, so it lives in mobileMain instead of commonMain
-    applyDefaultHierarchyTemplate {
-        common {
-            group("mobile") {
-                withAndroidTarget()
-                withIos()
-            }
-        }
-    }
-
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
@@ -39,17 +27,6 @@ kotlin {
         }
     }
 
-    js {
-        browser()
-        binaries.executable()
-    }
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-        binaries.executable()
-    }
-
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
@@ -60,12 +37,9 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-        // mobileMain is created by applyDefaultHierarchyTemplate above
-        getByName("mobileMain").dependencies {
+        commonMain.dependencies {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
-        }
-        commonMain.dependencies {
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -84,6 +58,7 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktorfit.lib)
+            implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {

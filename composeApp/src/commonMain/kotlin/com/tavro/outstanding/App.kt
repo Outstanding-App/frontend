@@ -1,22 +1,25 @@
 package com.tavro.outstanding
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.tavro.outstanding.component.RootComponent
-import com.tavro.outstanding.component.main.MainScreen
+import androidx.compose.ui.Modifier
+import com.tavro.outstanding.core.koin.OutstandingKoinContext
+import com.tavro.outstanding.designsystem.theme.JadeTheme
+import org.koin.compose.KoinIsolatedContext
 
+/**
+ * Root composable. Scopes Koin to the isolated [OutstandingKoinContext] so that compose extensions
+ * like `getKoin()` resolve against the app's own graph rather than any global Koin instance.
+ */
 @Composable
-fun App(rootComponent: RootComponent) {
-    MaterialTheme {
-        val stack by rootComponent.stack.subscribeAsState()
-
-        Children(stack) { child ->
-            when (val instance = child.instance) {
-                is RootComponent.Child.Main -> MainScreen(instance.component)
-                RootComponent.Child.Settings -> Unit // TODO
+fun App(component: RootComponent, modifier: Modifier = Modifier) {
+    KoinIsolatedContext(context = OutstandingKoinContext.application) {
+        JadeTheme {
+            Box(
+                modifier = modifier.background(JadeTheme.colorScheme.background)
+            ) {
+                RootContent(component = component)
             }
         }
     }
