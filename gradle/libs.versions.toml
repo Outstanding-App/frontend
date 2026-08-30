@@ -12,6 +12,7 @@ androidx-testExt = "1.3.0"
 composeMultiplatform = "1.10.3"
 decompose = "3.4.0"
 junit = "4.13.2"
+kmpMaps = "0.9.1"
 koin = "4.1.1"
 kotlin = "2.3.20"
 kotlinx-collections-immutable = "0.3.8"
@@ -60,6 +61,7 @@ ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+swmansion-kmpMaps-core = { module = "com.swmansion.kmpmaps:core", version.ref = "kmpMaps" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

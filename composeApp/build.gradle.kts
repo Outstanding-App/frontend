@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,6 +10,15 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
+
+/**
+ * Google Maps key used by the map tab on Android. Kept out of version control: set `MAPS_API_KEY`
+ * in `local.properties` or in the environment. Without it the map renders as an empty grid.
+ */
+val mapsApiKey: String = Properties().apply {
+    val localProperties = rootProject.file("local.properties")
+    if (localProperties.exists()) localProperties.inputStream().use(::load)
+}.getProperty("MAPS_API_KEY") ?: System.getenv("MAPS_API_KEY") ?: ""
 
 kotlin {
     androidTarget {
@@ -60,6 +70,7 @@ kotlin {
             implementation(libs.ktorfit.lib)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.swmansion.kmpMaps.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -81,6 +92,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
     packaging {
         resources {
