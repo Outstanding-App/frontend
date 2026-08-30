@@ -37,7 +37,7 @@ interface AuthService {
 class HttpAuthService(private val client: HttpClient) : AuthService {
     override suspend fun login(username: String, password: String): Result<UserSession> =
         runCatching {
-            client.post("http://localhost:8000/users/login/") {
+            client.post("https://outstanding-4710050d1c51.herokuapp.com/users/login/") {
                 contentType(ContentType.Application.Json)
                 setBody(LoginRequest(username, password))
             }.body<AuthResponse>().toSession(username)
@@ -49,7 +49,7 @@ class HttpAuthService(private val client: HttpClient) : AuthService {
         passwordConfirmation: String,
         email: String
     ): Result<UserSession> = runCatching {
-        client.post("http://localhost:8000/users/register/") {
+        client.post("https://outstanding-4710050d1c51.herokuapp.com/users/register/") {
             contentType(ContentType.Application.Json)
             setBody(RegisterRequest(username, password, passwordConfirmation, email))
         }.body<AuthResponse>().toSession(username)
