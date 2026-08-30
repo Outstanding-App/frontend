@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import com.arkivanov.decompose.router.stack.pushNew
 import com.tavro.outstanding.navigation.Config
+import com.tavro.outstanding.resources.Strings
 import com.tavro.outstanding.navigation.Navigator
 
 @Composable
@@ -82,7 +83,7 @@ fun bindMessageToSnackbarHostState(
     val action = if (message is UserMessage.Error)
         null
     else if (message is UserMessage.Error && onErrorDetailsClick != null) SnackbarData.Action(
-        label = "Details",
+        label = Strings.action_label_details,
         onClick = { onErrorDetailsClick(message) }
     ) else if (message is UserMessage.Info && message.action != null) SnackbarData.Action(
         label = message.action.label,

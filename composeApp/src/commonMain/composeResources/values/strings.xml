@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Outstanding</string>
+    <string name="button_label_log_out">Log out</string>
+    <string name="button_label_login">Login</string>
+    <string name="button_label_already_registered">Already have an account?</string>
+    <string name="button_label_no_account">Need an account?</string>
+    <string name="button_label_register">Register</string>
+    <string name="placeholder_username">Username</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_email">Email</string>
+    <string name="content_desc_outstanding_logo">Outstanding logo</string>
+    <string name="error_message_failed_login">Failed to sign in</string>
+    <string name="action_label_details">Details</string>
+    <string name="tab_label_home">Home</string>
+    <string name="tab_label_profile">Profile</string>
+    <string name="title_map">Map</string>
+    <string name="title_profile">Profile</string>
+</resources>
