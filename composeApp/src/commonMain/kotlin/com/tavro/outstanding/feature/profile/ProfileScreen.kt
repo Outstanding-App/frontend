@@ -14,6 +14,7 @@ import com.tavro.outstanding.designsystem.components.JadeFilledButton
 import com.tavro.outstanding.designsystem.theme.JadeTheme
 import com.tavro.outstanding.designsystem.theme.contentColorFor
 import com.tavro.outstanding.designsystem.tokens.Space
+import com.tavro.outstanding.resources.Strings
 
 @Composable
 fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier) {
@@ -26,12 +27,12 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier) {
             verticalArrangement = Arrangement.spacedBy(Space.md),
         ) {
             Text(
-                text = "Profile",
+                text = Strings.title_profile,
                 style = JadeTheme.typography.headlineMedium,
                 color = contentColorFor(JadeTheme.colorScheme.background)
             )
             JadeFilledButton(
-                text = "Log out",
+                text = Strings.button_label_log_out,
                 onClick = onLogout,
                 enabled = true,
                 minFontSize = TextUnit.Unspecified,

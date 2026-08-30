@@ -43,6 +43,7 @@ import com.tavro.outstanding.designsystem.theme.JadeTheme
 import com.tavro.outstanding.designsystem.theme.LocalJadeContentColor
 import com.tavro.outstanding.feature.map.MapScreen
 import com.tavro.outstanding.feature.profile.ProfileScreen
+import org.jetbrains.compose.resources.stringResource
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -188,7 +189,7 @@ private fun BottomBarItemIcon(
     colors: NavigationBarItemColors,
     tab: MainScreenTab
 ) {
-    val title = tab.title
+    val title = stringResource(tab.title)
     val iconColor = colors.iconColor(selected = selected, enabled = true)
     CompositionLocalProvider(LocalJadeContentColor provides iconColor) {
         Box(modifier = Modifier.clearAndSetSemantics {}) {

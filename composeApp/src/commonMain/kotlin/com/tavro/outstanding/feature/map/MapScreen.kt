@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.tavro.outstanding.designsystem.theme.JadeTheme
 import com.tavro.outstanding.designsystem.theme.contentColorFor
+import com.tavro.outstanding.resources.Strings
 
 @Composable
 fun MapScreen(modifier: Modifier) {
@@ -15,7 +16,7 @@ fun MapScreen(modifier: Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = "Map",
+            text = Strings.title_map,
             style = JadeTheme.typography.headlineMedium,
             color = contentColorFor(JadeTheme.colorScheme.background)
         )

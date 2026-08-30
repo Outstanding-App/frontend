@@ -44,6 +44,7 @@ import com.tavro.outstanding.designsystem.components.visualTransformationIfSuppo
 import com.tavro.outstanding.designsystem.theme.JadeTheme
 import com.tavro.outstanding.designsystem.tokens.Space
 import com.tavro.outstanding.navigation.rememberNavigator
+import com.tavro.outstanding.resources.Strings
 import org.jetbrains.compose.resources.vectorResource
 import outstanding.composeapp.generated.resources.Res
 import outstanding.composeapp.generated.resources.logo
@@ -55,7 +56,7 @@ fun LoginScreen(
 ) {
     val state = component.state.collectAsState().value
     val error = if (state is LoginScreenState.Failure) UserMessage.Error(
-        text = "Failed to sign in",
+        text = Strings.error_message_failed_login,
         cause = state.cause
     ) else null
     val navigator = rememberNavigator()
@@ -122,13 +123,13 @@ internal fun LoginScreenContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 imageVector = vectorResource(Res.drawable.logo),
-                contentDescription = "Outstanding logo",
+                contentDescription = Strings.content_desc_outstanding_logo,
                 modifier = Modifier
                     .height(logoHeight)
                     .aspectRatio(200f / 240f)
             )
             JadeText(
-                text = "Outstanding",
+                text = Strings.app_name,
                 style = titleStyle
             )
         }
@@ -138,7 +139,7 @@ internal fun LoginScreenContent(
                 text = username,
                 onTextChange = { username = it },
                 supportingText = null,
-                placeholder = "username",
+                placeholder = Strings.placeholder_username,
                 keyboardActions = usernameKeyboardActions,
                 keyboardOptions = usernameKeyboardOptions,
                 singleLine = true,
@@ -156,7 +157,7 @@ internal fun LoginScreenContent(
                 text = password,
                 onTextChange = { password = it },
                 supportingText = null,
-                placeholder = "password",
+                placeholder = Strings.placeholder_password,
                 keyboardActions = passwordKeyboardActions,
                 keyboardOptions = passwordKeyboardOptions,
                 singleLine = true,
@@ -171,14 +172,14 @@ internal fun LoginScreenContent(
             )
             Spacer(modifier = Modifier.weight(1.0f))
             JadeFilledButton(
-                text = "Login",
+                text = Strings.button_label_login,
                 onClick = { onLoginClicked(username.text, password.text) },
                 enabled = loginState is LoginScreenState.Initial,
                 minFontSize = TextUnit.Unspecified,
                 modifier = Modifier.fillMaxWidth()
             )
             JadeOutlinedButton(
-                text = "Need an account?",
+                text = Strings.button_label_no_account,
                 onClick = { showLogin = false },
                 enabled = loginState is LoginScreenState.Initial,
                 minFontSize = TextUnit.Unspecified,
@@ -190,7 +191,7 @@ internal fun LoginScreenContent(
                 text = registerUsername,
                 onTextChange = { registerUsername = it },
                 supportingText = null,
-                placeholder = "username",
+                placeholder = Strings.placeholder_username,
                 keyboardActions = usernameKeyboardActions,
                 keyboardOptions = usernameKeyboardOptions,
                 singleLine = true,
@@ -208,7 +209,7 @@ internal fun LoginScreenContent(
                 text = registerPassword,
                 onTextChange = { registerPassword = it },
                 supportingText = null,
-                placeholder = "password",
+                placeholder = Strings.placeholder_password,
                 keyboardActions = passwordKeyboardActions,
                 keyboardOptions = passwordKeyboardOptions,
                 singleLine = true,
@@ -226,7 +227,7 @@ internal fun LoginScreenContent(
                 text = email,
                 onTextChange = { email = it },
                 supportingText = null,
-                placeholder = "email",
+                placeholder = Strings.placeholder_email,
                 keyboardActions = passwordKeyboardActions,
                 keyboardOptions = passwordKeyboardOptions,
                 singleLine = true,
@@ -241,14 +242,14 @@ internal fun LoginScreenContent(
             )
             Spacer(modifier = Modifier.weight(1.0f)) 
             JadeFilledButton(
-                text = "Register",
+                text = Strings.button_label_register,
                 onClick = { onRegisterClicked(registerUsername.text, registerPassword.text, email.text) },
                 enabled = loginState is LoginScreenState.Initial,
                 minFontSize = TextUnit.Unspecified,
                 modifier = Modifier.fillMaxWidth()
             )
             JadeOutlinedButton(
-                text = "Already have an account?",
+                text = Strings.button_label_already_registered,
                 onClick = { showLogin = true },
                 enabled = loginState is LoginScreenState.Initial,
                 minFontSize = TextUnit.Unspecified,

@@ -5,6 +5,10 @@ import androidx.compose.material.icons.automirrored.filled.Feed
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.tavro.outstanding.navigation.Config
+import org.jetbrains.compose.resources.StringResource
+import outstanding.composeapp.generated.resources.Res
+import outstanding.composeapp.generated.resources.tab_label_home
+import outstanding.composeapp.generated.resources.tab_label_profile
 
 /**
  * @property neverLeavesComposition When `true` the tab's content stays in the composition tree
@@ -13,17 +17,17 @@ import com.tavro.outstanding.navigation.Config
  */
 enum class MainScreenTab(
     val icons: TabIcons,
-    val title: String,
+    val title: StringResource,
     val neverLeavesComposition: Boolean = false,
 ) {
     Home(
         icons = TabIcons(normal = Icons.AutoMirrored.Default.Feed, filled = Icons.AutoMirrored.Filled.Feed),
-        title = "Home",
+        title = Res.string.tab_label_home,
         neverLeavesComposition = true
     ),
     Profile(
         icons = TabIcons(normal = Icons.AutoMirrored.Default.Help, filled = Icons.AutoMirrored.Filled.Help),
-        title = "Profile",
+        title = Res.string.tab_label_profile,
         neverLeavesComposition = false
     );
 
